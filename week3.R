@@ -2,6 +2,7 @@ library(tidyverse)
 library(skimr)
 library(patchwork)
 
+
 wood_density <- read_csv("Data/wood_density.csv")
 
 ### loading the data
@@ -66,4 +67,30 @@ p3 <- wood_density_augmented %>%
 p1+p2+p3
 
 ### adding all 3 plots together to visually see it.
+
+broom::glance(density_model)
+ 
+### Constructs a concise one-row summary of the model. 
+### This typically contains values such as R^2, adjusted R^2,
+### your F values, degrees of freedom and P
+
+broom::tidy(density_model, conf.int=TRUE)
+
+### Constructs a small tibble with most of the models summary data in it. 
+### Very similar to our summary() output.
+
+broom::augment(density_model, wood_density, interval="confidence")
+
+### Takes computations from our model fit and adds them back onto our original dataframe.
+### .fitted = predictions of the model
+### .resid = residuals
+### .upper is the 95% confidence interval upper value for our fit line
+### .lower is the 95% confidence interval lower value for our fit line
+
+plot1 <- broom::augment(density_model, wood_density, interval="confidence") %>% ggplot(aes(x=Density, y=Hardness))+geom_line(aes(x=Density, y=.fitted))+geom_line(aes(x=Density, y=.upper), linetype="dashed")+geom_line(aes(x=Density, y=.lower), linetype="dashed")+geom_point() +ggtitle("Manually fitting linear model \n and confidence intervals")
+
+plot2 <- wood_density %>% ggplot(aes(x=Density, y=Hardness))+geom_smooth(method=lm)+geom_point()+ggtitle("Geom smooth method to plotting \n a linear model")
+
+plot1+plot2
+
 
