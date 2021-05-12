@@ -107,4 +107,10 @@ plot1+plot2
 ### plot2 shows the code to make the plot with geom_smooth()
 ### they produce the same plot with great accuracy
 
+### write up 
+### Wood density is an excellent predictor of timber hardness. 
+### On average for every pound per cubic foot increase in the density
+### of wood, we see a 57.5 point increase in the Janka “hardness scale” 
+### (F1,34= 637, P <0.001, R^2 = 0.94).
+
 
