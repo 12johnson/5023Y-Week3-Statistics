@@ -87,10 +87,24 @@ broom::augment(density_model, wood_density, interval="confidence")
 ### .upper is the 95% confidence interval upper value for our fit line
 ### .lower is the 95% confidence interval lower value for our fit line
 
-plot1 <- broom::augment(density_model, wood_density, interval="confidence") %>% ggplot(aes(x=Density, y=Hardness))+geom_line(aes(x=Density, y=.fitted))+geom_line(aes(x=Density, y=.upper), linetype="dashed")+geom_line(aes(x=Density, y=.lower), linetype="dashed")+geom_point() +ggtitle("Manually fitting linear model \n and confidence intervals")
+plot1 <- broom::augment(density_model, wood_density, 
+                        interval="confidence") %>% 
+  ggplot(aes(x=Density, y=Hardness))+
+  geom_line(aes(x=Density, y=.fitted))+
+  geom_line(aes(x=Density, y=.upper), linetype="dashed")+
+  geom_line(aes(x=Density, y=.lower), linetype="dashed")+
+  geom_point() +
+  ggtitle("Manually fitting linear model \n and confidence intervals")
 
-plot2 <- wood_density %>% ggplot(aes(x=Density, y=Hardness))+geom_smooth(method=lm)+geom_point()+ggtitle("Geom smooth method to plotting \n a linear model")
+plot2 <- wood_density %>% ggplot(aes(x=Density, y=Hardness))+
+  geom_smooth(method=lm)+
+  geom_point()+
+  ggtitle("Geom smooth method to plotting \n a linear model")
 
 plot1+plot2
+
+### plot1 shows the code to work out the confidence interval manually
+### plot2 shows the code to make the plot with geom_smooth()
+### they produce the same plot with great accuracy
 
 
