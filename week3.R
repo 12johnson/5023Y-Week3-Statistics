@@ -114,3 +114,44 @@ plot1+plot2
 ### (F1,34= 637, P <0.001, R^2 = 0.94).
 
 
+### week 4 workshop below 
+
+darwin <- read_csv("Data/darwin.csv")
+
+### read in the data
+
+darwin <- darwin %>% 
+  pivot_longer(cols=c("Self":"Cross"), 
+               names_to="type", 
+               values_to="height") %>% 
+  mutate(type=factor(type, 
+                     levels=c("Self",
+                              "Cross"))) %>% 
+  mutate(pair=factor(pair))
+
+### tidy data
+### changing data type to a more appropriate one
+
+darwin_model <- lm(formula = height ~ type + pair, data = darwin)
+darwin_model
+
+### code for a linear model that includes type and pair
+### selfed plant from pair 1 is an inbred plant from parent 1 
+### crossed plant has one parent as parent 1 and 
+### was outbred to have one other parent.
+### This is now the equivalent of a paired t-test. 
+### As the estimate of height difference now excludes
+### any variance accounted for by the pairs.
+
+summary(darwin_model)
+
+### Well it looks as though when you include variance
+### explained by pairing, the type Cross/Inbred is still significant.
+### However none of the pair groups appear to
+### significantly alter the mean height of plants.
+
+### On average within each pair the crossed plant is taller
+### than the selfed plant.
+### There is not a difference in the average height
+### of plants between different pairs.
+
