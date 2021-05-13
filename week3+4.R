@@ -198,7 +198,76 @@ tidymodel1 <- broom::tidy(darwin_model) %>%
 ### format as well as using the mutate function to add the 
 ### upper and lower confidence intervals
 
+tidymodel1 %>% 
+  ggplot(aes(x=estimate, 
+             y=term))+
+  geom_pointrange(aes(xmin=lwr, 
+                      xmax=upr))+
+  geom_vline(xintercept=0, 
+             linetype="dashed")
 
+### this code creates a plot showing the means and 
+### the confidence intervals the plot shows that no pair is
+### significantly different at the P<0.05 as
+### they all cross the zero line
 
+tidymodel2 <- broom::tidy(darwin_model, conf.int=T) 
+tidymodel2[2,]
 
+### this code shows the confidence interval
+### the second line of code specifies that we only wish to see row 2
 
+tidymodel2 %>% 
+  ggplot(aes(x=estimate, 
+             y=term))+
+  geom_pointrange(aes(xmin=conf.low, 
+                      xmax=conf.high))+
+  geom_vline(xintercept=0, 
+             linetype="dashed")
+
+### this plot has more accurate confidence intervals because
+### CI are approximately 2*S.E if the assumption of
+### a normal z distribution is true.
+### Sample sizes <30 become increasingly further away from
+### the z distribution and follow the t distribution instead.
+### When R calculates CI probabilities it uses the exact t distribution
+### for the sample size.
+### We can manually calculate the appropriate t for ourselves
+### (though we don’t have to). So that we better understand how
+### sample size can affect our ability to make accurate predictions.
+
+t.crit <- qt(0.975, df=14)
+
+upr <- 2.62+t.crit*1.22
+lwr <- 2.62-t.crit*1.22
+
+### we can also use the tcrit function to set a threshold
+### of 0.975 (equivalent to 0.95 for a two-sided test)
+
+### WRITE UP - WEEK 4
+
+### A paired t-test showed that the cross-pollinated maize
+### were significantly taller than the self-pollinated plants
+### by an average of 2.6 inches (95% CI: 0.004-5.23).
+
+### Why no F-tests, df or P values? Well in theory this gives
+### us the same qualititative information as we know that our
+### 95% CI range is >0 so we can say that the difference in
+### height is significant at P<0.05. And we are providing direct 
+### biological information about the estimated height difference.
+
+### BUT most people will expect you to report F values, 
+### df, P values etc. so you should probably include them as well.
+
+### A pairwise linear model showed that the cross-pollinated
+### maize were significantly taller than the self-pollinated plants
+### (F1,14= 4.61, P = 0.05) by an average of 2.6 inches
+### (95% CI: 0.004-5.23)
+
+### EFFECT SIZE: Finally although we know we have a significant
+### height difference it is only by a very small margin (0.004 inches).
+### In this way we can actually say we have 95% confidence
+### that the height difference is at least 0.004 inches.
+### If we wanted to we could estimate a range of confidence intervals
+### e.g. we have 66% confidence that the height difference is at
+### least 1.4 inches {confint(model, level=0.66)}
