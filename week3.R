@@ -1,7 +1,7 @@
 library(tidyverse)
 library(skimr)
 library(patchwork)
-
+library(emmeans)
 
 wood_density <- read_csv("Data/wood_density.csv")
 
@@ -154,4 +154,51 @@ summary(darwin_model)
 ### than the selfed plant.
 ### There is not a difference in the average height
 ### of plants between different pairs.
+
+summary(aov(darwin_model))
+
+### instead of the looking at the estimates in turn we can  
+### summarise these differences by an anova test.
+### This seems to be back up our observation that pair
+### does not significantly affect the mean height,
+### while type does. As the Pr value is 0.0497 for type,
+### and 0.8597 for pair
+
+### At this point we can reject a hypothesis that
+### the means of the crossed and self plants are equal
+### within each pair.
+### However we cannot reject a hypothesis that
+### the mean heights between the different pairs of plants are equal.
+
+estimates <- emmeans(darwin_model, specs="type")
+
+### here it will take the average of the values
+### across all the pairs to calculate means for type
+
+estimates %>% 
+  as_tibble %>%
+  ggplot(aes(x=type, 
+             y=emmean, 
+             colour=type))+
+  geom_pointrange(aes(ymin=lower.CL, 
+                      ymax=upper.CL))+
+  geom_pointrange(aes(ymin=emmean-SE, 
+                      ymax=emmean+SE), 
+                  size=1.2)
+
+### emmeans outputs a grid by default, but can easily be changed
+### the code creates a plot that shows the mean height
+### and the 66% and 95% confidence intervals
+
+tidymodel1 <- broom::tidy(darwin_model) %>% 
+  mutate(lwr=((estimate-(std.error*2))),
+         upr=(estimate+(std.error*2)))
+
+### this code forces the summary statistics into a dataframe
+### format as well as using the mutate function to add the 
+### upper and lower confidence intervals
+
+
+
+
 
