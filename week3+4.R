@@ -270,4 +270,4 @@ lwr <- 2.62-t.crit*1.22
 ### that the height difference is at least 0.004 inches.
 ### If we wanted to we could estimate a range of confidence intervals
 ### e.g. we have 66% confidence that the height difference is at
-### least 1.4 inches {confint(model, level=0.66)}
+###  least 1.4 inches {confint(model, level=0.66)}
