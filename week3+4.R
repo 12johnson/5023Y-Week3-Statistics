@@ -162,7 +162,7 @@ summary(aov(darwin_model))
 ### This seems to be back up our observation that pair
 ### does not significantly affect the mean height,
 ### while type does. As the Pr value is 0.0497 for type,
-### and 0.8597 for pair
+### and 0.8597 for pair.
 
 ### At this point we can reject a hypothesis that
 ### the means of the crossed and self plants are equal
@@ -188,7 +188,7 @@ estimates %>%
 
 ### emmeans outputs a grid by default, but can easily be changed
 ### the code creates a plot that shows the mean height
-### and the 66% and 95% confidence intervals
+### and the 66% (thick line) and 95% (thin line) confidence intervals
 
 tidymodel1 <- broom::tidy(darwin_model) %>% 
   mutate(lwr=((estimate-(std.error*2))),
